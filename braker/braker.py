@@ -1,15 +1,36 @@
-#!venv/bin/python
-
 import click
 import os
 import subprocess
+import sys
+print(sys.version)
+import configparser
 
-handbrake_path = 'C:\\Program Files\\Handbrake\\HandBrakeCli.exe'
 
 DEFAULT_PRESET = 'Roku 1080p30 Surround'
 DEFAULT_START = 'duration:5'
+DEFAULT_PATH = 'HandBrakeCLI'
 
 extensions = ('mp4')
+
+
+def test_path(candidate):
+    result = subprocess.run([candidate, '--version'])
+    return result.returncode is 0
+    
+config = configparser.ConfigParser()
+config_exists = config.read('config.ini')
+if config_exists:
+    handbrake_path = config['DEFAULT']['handbrake_path']
+else:
+    handbrake_path = DEFAULT_PATH
+    result = False
+    while result is False:
+        result = test_path(handbrake_path)
+        if result is True:
+            config['DEFAULT']['handbrake_path'] = handbrake_path
+        else:
+            handbrake_path = input("Enter your HandBrakeCLI path: ")
+
 
 def videos_in(folder, recursive=True):
     for root, dirs, files in os.walk(folder):
