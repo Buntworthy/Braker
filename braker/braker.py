@@ -2,23 +2,27 @@ import click
 import os
 import subprocess
 import sys
-print(sys.version)
 import configparser
 
+#TODO suppress output
 
 DEFAULT_PRESET = 'Roku 1080p30 Surround'
 DEFAULT_START = 'duration:5'
-DEFAULT_PATH = 'HandBrakeCLI'
-
+DEFAULT_PATH = 'HandBrakeCLI_broke'
+CONFIG_PATH = 'config.ini'
 extensions = ('mp4')
 
 
 def test_path(candidate):
-    result = subprocess.run([candidate, '--version'])
-    return result.returncode is 0
+    try:
+        result = subprocess.run([candidate, '--version'])
+        if result.returncode is 0:
+            return True
+    except FileNotFoundError:
+        return False
 
 config = configparser.ConfigParser()
-config_exists = config.read('config.ini')
+config_exists = config.read(CONFIG_PATH)
 if config_exists:
     handbrake_path = config['DEFAULT']['handbrake_path']
 else:
@@ -28,6 +32,8 @@ else:
         result = test_path(handbrake_path)
         if result is True:
             config['DEFAULT']['handbrake_path'] = handbrake_path
+            with open(CONFIG_PATH, 'w') as configfile:
+                config.write(configfile)
         else:
             handbrake_path = input("Enter your HandBrakeCLI path: ")
 
