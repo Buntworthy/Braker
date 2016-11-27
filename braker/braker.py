@@ -16,7 +16,7 @@ extensions = ('mp4')
 def test_path(candidate):
     result = subprocess.run([candidate, '--version'])
     return result.returncode is 0
-    
+
 config = configparser.ConfigParser()
 config_exists = config.read('config.ini')
 if config_exists:
@@ -68,7 +68,7 @@ def convert(in_folder, out_folder, preset, start_at):
     type=click.Path(
         file_okay=False,
         writable=True
-    ))
+    )) # TODO make sure the output path exists
 @click.option('--preset', default=DEFAULT_PRESET)
 @click.option('--start_at', default=DEFAULT_START)
 def cli(input_path, output_path, preset, start_at):
