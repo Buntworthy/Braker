@@ -5,12 +5,15 @@ import sys
 import configparser
 
 #TODO suppress output
+#TODO pass through options to handbrake
+#TODO remember presets/used settings
+#TODO refector out module
 
 DEFAULT_PRESET = 'Roku 1080p30 Surround'
 DEFAULT_START = 'duration:5'
 DEFAULT_PATH = 'HandBrakeCLI_broke'
-CONFIG_PATH = 'config.ini'
-extensions = ('mp4')
+CONFIG_PATH = os.path.expanduser('~/.brakerrc')
+extensions = ('mp4') #TODO optionalise
 
 
 def test_path(candidate):

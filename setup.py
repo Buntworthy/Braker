@@ -7,6 +7,6 @@ setup(
     install_requires=['Click',],
     entry_points='''
         [console_scripts]
-        braker=braker:cli
+        braker=braker.braker:cli
     '''
 )
